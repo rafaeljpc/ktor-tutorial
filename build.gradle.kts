@@ -10,7 +10,7 @@ repositories {
     jcenter()
 }
 
-allprojects {
+subprojects {
     repositories {
         mavenCentral()
         jcenter()
