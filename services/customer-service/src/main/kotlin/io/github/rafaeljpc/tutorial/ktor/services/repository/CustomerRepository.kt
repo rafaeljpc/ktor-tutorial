@@ -1,13 +1,53 @@
 package io.github.rafaeljpc.tutorial.ktor.services.repository
 
 import io.github.rafaeljpc.tutorial.ktor.services.model.Customer
+import io.github.rafaeljpc.tutorial.ktor.services.repository.Customers.email
+import io.github.rafaeljpc.tutorial.ktor.services.repository.Customers.id
+import io.github.rafaeljpc.tutorial.ktor.services.repository.Customers.name
+import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.LongIdTable
+import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.statements.UpdateBuilder
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.koin.core.KoinComponent
+import javax.sql.DataSource
 
-class CustomerRepository {
-    fun findAll(): List<Customer> {
-        return listOf(
-                Customer(1, "test 1", "test1@test.com"),
-                Customer(2, "test 2", "test2@test.com"),
-                Customer(3, "test 3", "test3@test.com")
-        )
+object Customers : LongIdTable("customers"), KoinComponent {
+    val name: Column<String> = varchar("name", 50)
+    val email: Column<String> = varchar("email", 255)
+
+    init {
+        uniqueIndex("UK_CUSTOMER_NAME", name)
+        uniqueIndex("UK_CUSTOMER_EMAIL", email)
     }
+}
+
+
+class CustomerRepository(dataSource: DataSource) : KoinComponent {
+
+    fun findAll(): List<Customer> {
+        return transaction {
+            Customers.selectAll().map { row -> toModel(row) }
+        }
+    }
+
+    fun create(customer: Customer) {
+        transaction {
+            Customers.insert {
+                fillRow(it, customer)
+            }
+        }
+    }
+
+    private fun fillRow(row: UpdateBuilder<Int>, customer: Customer) {
+        row[id] = EntityID<Long>(customer.id, Customers)
+        row[name] = customer.name
+        row[email] = customer.email
+    }
+
+    private fun toModel(row: ResultRow) = Customer(id = row[id].value, name = row[name], email = row[email])
+
 }
