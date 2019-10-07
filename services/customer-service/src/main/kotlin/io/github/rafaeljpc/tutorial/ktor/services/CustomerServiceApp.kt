@@ -30,11 +30,11 @@ val customerAppModule = module(createdAtStart = true) {
         ConfigFactory.load()
     }
     single { CustomerServiceImpl() as CustomerService }
-    single { CustomerRepository(get() as DataSource) }
+    single { CustomerRepository(get() as Database) }
     single<DataSource> {
         val config = get() as Config
         val profile = config.getString("profile")
-        val dbConfig = HikariConfig(config.getConfig(profile).toProperties())
+        val dbConfig = HikariConfig(config.getConfig("$profile.dataSource").toProperties())
         HikariDataSource(dbConfig)
     }
     factory() {
