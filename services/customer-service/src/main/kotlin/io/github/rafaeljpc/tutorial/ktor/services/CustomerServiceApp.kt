@@ -5,6 +5,7 @@ import com.typesafe.config.ConfigFactory
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.github.rafaeljpc.tutorial.ktor.services.repository.CustomerRepository
+import io.github.rafaeljpc.tutorial.ktor.services.repository.Customers
 import io.github.rafaeljpc.tutorial.ktor.services.service.CustomerService
 import io.github.rafaeljpc.tutorial.ktor.services.service.CustomerServiceImpl
 import io.ktor.application.Application
@@ -18,6 +19,8 @@ import io.ktor.server.engine.commandLineEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.transactionManager
 import org.koin.Logger.slf4jLogger
 import org.koin.dsl.module
 import org.koin.ktor.ext.Koin
@@ -51,6 +54,11 @@ fun Application.main() {
     install(Koin) {
         slf4jLogger()
         modules(customerAppModule)
+
+        val database = koin.get() as Database
+        database.transactionManager.newTransaction()
+        SchemaUtils.createMissingTablesAndColumns(Customers)
+
     }
 
     initConfig()

@@ -38,7 +38,9 @@ class CustomerRepository(val database: Database) : KoinComponent {
     }
 
     private fun fillRow(row: UpdateBuilder<Int>, customer: Customer) {
-        row[id] = EntityID<Long>(customer.id, Customers)
+        if (customer.id > 0L) {
+            row[id] = EntityID(customer.id, Customers)
+        }
         row[name] = customer.name
         row[email] = customer.email
     }

@@ -7,6 +7,7 @@ import org.koin.core.inject
 
 interface CustomerService : KoinComponent {
     fun findAll(): List<Customer>
+    fun create(customer: Customer)
 }
 
 class CustomerServiceImpl : CustomerService {
@@ -14,4 +15,6 @@ class CustomerServiceImpl : CustomerService {
     private val repository: CustomerRepository by inject()
 
     override fun findAll(): List<Customer> = repository.findAll()
+
+    override fun create(customer: Customer) = repository.create(customer)
 }
