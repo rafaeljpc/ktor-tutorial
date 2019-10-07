@@ -19,6 +19,9 @@ fun Route.customer() {
         get {
             call.respond(customerService.findAll())
         }
+        get("/{id}") {
+            call.respond(customerService.findById(call.parameters["id"]!!.toLong()))
+        }
         post {
             val customer = call.receive<Customer>()
             customerService.create(customer)

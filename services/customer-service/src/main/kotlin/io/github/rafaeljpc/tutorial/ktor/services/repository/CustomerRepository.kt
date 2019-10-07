@@ -37,6 +37,12 @@ class CustomerRepository(val database: Database) : KoinComponent {
         }
     }
 
+    fun findById(id: Long): Customer {
+        return transaction {
+            Customers.select { Customers.id.eq(id) }.map { row -> toModel(row) }.first()
+        }
+    }
+
     private fun fillRow(row: UpdateBuilder<Int>, customer: Customer) {
         if (customer.id > 0L) {
             row[id] = EntityID(customer.id, Customers)
@@ -45,7 +51,7 @@ class CustomerRepository(val database: Database) : KoinComponent {
         row[email] = customer.email
     }
 
-    private fun toModel(row: ResultRow) = Customer(id = row[id].value, name = row[name], email = row[email])
 
+    private fun toModel(row: ResultRow) = Customer(id = row[id].value, name = row[name], email = row[email])
 }
 
