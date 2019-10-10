@@ -5,13 +5,14 @@ import io.github.rafaeljpc.tutorial.ktor.services.repository.Customers.email
 import io.github.rafaeljpc.tutorial.ktor.services.repository.Customers.id
 import io.github.rafaeljpc.tutorial.ktor.services.repository.Customers.name
 import org.jetbrains.exposed.dao.EntityID
-import org.jetbrains.exposed.dao.LongIdTable
+import org.jetbrains.exposed.dao.IdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.KoinComponent
 
-object Customers : LongIdTable("customers"), KoinComponent {
+object Customers : IdTable<Long>("customers"), KoinComponent {
+    override val id: Column<EntityID<Long>> = long("id").autoIncrement("SEQ_CUSTOMER_ID").primaryKey().entityId()
     val name: Column<String> = varchar("name", 50)
     val email: Column<String> = varchar("email", 255)
 
@@ -50,7 +51,6 @@ class CustomerRepository(val database: Database) : KoinComponent {
         row[name] = customer.name
         row[email] = customer.email
     }
-
 
     private fun toModel(row: ResultRow) = Customer(id = row[id].value, name = row[name], email = row[email])
 }
