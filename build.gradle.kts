@@ -21,4 +21,8 @@ subprojects {
             jvmTarget = "1.8"
         }
     }
+
+    tasks.withType<Test>() {
+        useJUnitPlatform()
+    }
 }
