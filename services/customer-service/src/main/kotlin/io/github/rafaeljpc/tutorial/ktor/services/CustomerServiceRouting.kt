@@ -3,6 +3,7 @@ package io.github.rafaeljpc.tutorial.ktor.services
 import io.github.rafaeljpc.tutorial.ktor.services.model.Customer
 import io.github.rafaeljpc.tutorial.ktor.services.service.CustomerService
 import io.ktor.application.call
+import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
@@ -25,6 +26,7 @@ fun Route.customer() {
         post {
             val customer = call.receive<Customer>()
             customerService.create(customer)
+            call.respond(HttpStatusCode.OK)
         }
     }
 }

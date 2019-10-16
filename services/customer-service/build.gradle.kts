@@ -24,6 +24,8 @@ dependencies {
 
     // Test
     testImplementation("io.ktor:ktor-server-test-host:1.2.+")
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.3.50")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.3.50")
 }
 
 kotlin {
