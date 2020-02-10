@@ -7,11 +7,11 @@ plugins {
 
 dependencies {
     // Log
-    implementation("ch.qos.logback:logback-classic:1.2.3")
+    implementation("ch.qos.logback:logback-classic:1.2.+")
 
     // Ktor
-    implementation("io.ktor:ktor-server-netty:1.2.+")
-    implementation("io.ktor:ktor-jackson:1.2.+")
+    implementation("io.ktor:ktor-server-netty:1.3.+")
+    implementation("io.ktor:ktor-jackson:1.3.+")
 
     // database
     runtime("com.h2database:h2:1.4.+")
@@ -23,9 +23,9 @@ dependencies {
     implementation("org.koin:koin-logger-slf4j:2.0.1")
 
     // Test
-    testImplementation("io.ktor:ktor-server-test-host:1.2.+")
-    testImplementation("org.jetbrains.kotlin:kotlin-test:1.3.50")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.3.50")
+    testImplementation("io.ktor:ktor-server-test-host:1.3.+")
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 }
 
 kotlin {

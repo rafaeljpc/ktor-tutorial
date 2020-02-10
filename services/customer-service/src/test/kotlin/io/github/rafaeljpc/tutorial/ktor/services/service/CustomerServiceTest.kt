@@ -21,8 +21,6 @@ class CustomerServiceTest {
     @Test
     fun `should create customer`() {
         withTestApplication(Application::main) {
-            val log = arrayListOf<String>()
-
             handleRequest(method = HttpMethod.Post, uri = "/customer") {
                 addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
                 setBody(jackson.writeValueAsString(Customer(name = "test", email = "test@test.com")))
