@@ -26,12 +26,17 @@ dependencies {
     testImplementation("io.ktor:ktor-server-test-host:1.3.+")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.+")
 }
 
 kotlin {
     experimental {
         coroutines = Coroutines.ENABLE
     }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
 
 application {
